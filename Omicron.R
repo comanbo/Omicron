@@ -1,20 +1,6 @@
-#---------------------------------------------------------
-#
-# FILE NAME: Churn.R
-#
-# Author: BGL
-#
-# Date: 2020.10.01
-#
-# Comments: r script to support IESE Churn Case - EMBA MUC 2021
-#
-# Modifications
-#
-#--------------------------------------------------------
-
 
 #IN CASE YOU NEED TO INSTALL THE PACKAGE FIRST
-#install.packages()
+# install.packages()
 library(readxl)
 library(tidyverse)
 library(ggplot2)
@@ -24,6 +10,11 @@ library(rpart.plot)
 library(reshape2)
 library(gtools)
 library(caTools)
+library(rattle)
+library(caret)
+library(OneR)
+
+
 
 
 
@@ -111,9 +102,11 @@ mod12
 
 
 # Building global model
-global_m=lm(CHURN ~ INTPLAN+DATAPLAN+as.factor(DATAGB)+OMMIN+OMCALL+OTMIN+OTCALL+NGMIN+NGCALL+IMIN+ICALL+CUSCALL, data=d)
+global_m=glm(CHURN ~ INTPLAN+DATAPLAN+as.factor(DATAGB)+OMMIN+OMCALL+OTMIN+OTCALL+NGMIN+NGCALL+IMIN+ICALL+CUSCALL, data=d, family="binomial"(link="logit"))
 global_m
 summary(global_m)
+
+
 
 # corr matrix --> detect colinear "noisy" variables
 cor_table=cor(d[,c(2:4,6:15)])
@@ -172,6 +165,9 @@ summary(d$OMMIN_bin)
 sum(d$INTPLAN)
 # proportion of people that have the intplan
 sum(d$INTPLAN)/nrow(d)
+
+rattle()
+sessionInfo()
 
 
 
